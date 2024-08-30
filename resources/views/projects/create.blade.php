@@ -27,7 +27,7 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
 document.getElementById('createProjectForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -72,4 +72,4 @@ document.getElementById('createProjectForm').addEventListener('submit', function
     });
 });
 </script>
-@endsection
+@endpush

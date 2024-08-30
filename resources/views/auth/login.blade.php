@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }).then(() => {
                     window.location.href = data.redirect;
                 });
+				setTimeout(function() { window.location.href = data.redirect; }, 1500);
             } else {
                 Swal.fire({
                     icon: 'error',

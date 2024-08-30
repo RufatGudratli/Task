@@ -55,7 +55,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
@@ -64,7 +64,7 @@ class LoginController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Logout successful',
-            'redirect' => route('/')
+            'redirect' => route('landing')
         ]);
     }
 }

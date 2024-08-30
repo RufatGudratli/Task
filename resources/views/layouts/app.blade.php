@@ -12,9 +12,12 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
 	<link rel="manifest" href="/assets/favicon/site.webmanifest">
 
-    <link rel="stylesheet" href="/assets/css/style.min.css">
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icofont@1.0.0/dist/icofont.min.css">
+	<link rel="stylesheet" href="/assets/css/style.min.css">
 
-	<link rel="stylesheet" href="/assets/js/jquery-3.7.1.min.js">
+	<script src="/assets/js/jquery-3.7.1.min.js"></script>
+	<script src="/assets/js/bootstrap.bundle.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
@@ -22,6 +25,9 @@
 
 @yield('content')
 
+
+
+	
 @stack('scripts')
 
 </body>

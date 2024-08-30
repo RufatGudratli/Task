@@ -22,4 +22,6 @@ Route::middleware('auth')->prefix('auth')->group(function () {
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 //Projects
-Route::resource('projects', ProjectController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('projects', ProjectController::class);
+});

@@ -6,13 +6,25 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ProjectCategory;
+
 
 class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Auth::user()->projects;
-        return view('projects.projects', compact('projects'));
+		//get all categories for modals
+		$categories = ProjectCategory::all();
+		
+		//get my projects
+		$projects = Auth::user()->ownedProjects;
+		
+		//get all users except me to assign project
+		$users = User::where('id', '!=', Auth::id())
+             ->select('id', 'name')
+             ->get();
+		
+        return view('projects.projects', compact('projects', 'categories', 'users'));
     }
 
     public function create()
@@ -26,24 +38,38 @@ class ProjectController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable',
-            'users' => 'array'
+            'category_id' => 'required|exists:categories,id',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'users' => 'nullable|array',
+            'users.*' => 'exists:users,id'
         ]);
 
-        $project = Project::create([
-            'name' => $validatedData['name'],
-            'description' => $validatedData['description'],
-            'owner_id' => Auth::id(),
-        ]);
+        try {
+            $project = Project::create([
+                'name' => $validatedData['name'],
+                'description' => $validatedData['description'],
+                'category_id' => $validatedData['category_id'],
+                'start_date' => $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+                'owner_id' => Auth::id(),
+            ]);
 
-        if (isset($validatedData['users'])) {
-            $project->users()->attach($validatedData['users']);
+            if (isset($validatedData['users'])) {
+                $project->users()->attach($validatedData['users']);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Project created successfully',
+                'redirect' => route('projects.index')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating project: ' . $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Project created successfully',
-            'redirect' => route('projects.projects')
-        ]);
     }
 
     public function show(Project $project)

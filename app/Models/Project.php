@@ -25,4 +25,9 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
     }
+	
+	public function category()
+	{
+		return $this->belongsTo(ProjectCategory::class, 'category_id');
+	}
 }
