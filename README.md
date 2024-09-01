@@ -35,23 +35,22 @@ Install Composer Dependencies:
 	composer install
 
 
-Configure Environment Variables:
-	Windows:
-	copy .env.example .env
+Configure Environment Variables
 
-	Linux/macOS:
-	cp .env.example .env
+For Windows users : ```    copy .env.example .env ```
 
+
+For Linux or maOS : ```    cp .env.example .env    ```
 
 Generate the application key for your Laravel application:
-	php artisan key:generate
+```	php artisan key:generate    ```
 
 
 Migrate the Database and Seed Data
-	php artisan migrate --seed
+```	php artisan migrate --seed    ```
 
 Start the Development Server:
-	php artisan serve
+```	php artisan serve    ```
 
 
 
