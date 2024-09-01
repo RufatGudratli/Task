@@ -31,7 +31,7 @@
                                 <div class="col-12">
                                     <div class="mb-2">
                                         <label class="form-label">Email address</label>
-                                        <input type="email" id="email" name="email" class="form-control form-control-lg" placeholder="email@example.com">
+                                        <input type="email" id="email" value="demo@example.com" name="email" class="form-control form-control-lg" placeholder="email@example.com">
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -39,10 +39,9 @@
                                         <div class="form-label">
                                             <span class="d-flex justify-content-between align-items-center">
                                                 Password
-                                                <a class="text-secondary" href="auth-password-reset.html">Forgot Password?</a>
                                             </span>
                                         </div>
-                                        <input type="password" id="password" name="password" class="form-control form-control-lg" placeholder="***************">
+                                        <input type="password" id="password" value="demo12345" name="password" class="form-control form-control-lg" placeholder="***************">
                                     </div>
                                 </div>
                                 <div class="col-12">

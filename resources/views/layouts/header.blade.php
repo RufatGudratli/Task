@@ -5,16 +5,16 @@
 				<div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center">
 					<div class="u-info me-2">
 						<p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">{{ Auth::user()->name }}</span></p>
-						<small>Admin Profile</small>
+						<small>{{ Auth::user()->email }}</small>
 					</div>
 					<a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-						<img class="avatar lg rounded-circle img-thumbnail" src="/assets/img/avatar.png">
+						<img class="avatar lg rounded-circle img-thumbnail" src="/{{ Auth::user()->profile_photo }}">
 					</a>
 					<div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
 						<div class="card border-0 w280">
 							<div class="card-body pb-0">
 								<div class="d-flex py-1">
-									<img class="avatar rounded-circle" src="/assets/img/avatar.png">
+									<img class="avatar rounded-circle" src="/{{ Auth::user()->profile_photo }}">
 									<div class="flex-fill ms-3">
 										<p class="mb-0"><span class="font-weight-bold">{{ Auth::user()->name }}</span></p>
 										<small class="">{{ Auth::user()->email }}</small>

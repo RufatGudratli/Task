@@ -1,52 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Project;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Models\ProjectCategory;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
 class ProjectController extends Controller
 {
-	use AuthorizesRequests;
-	
-    public function index()
+	public function index()
     {
-		//get all categories for modals
-		$categories = ProjectCategory::all();
-		
-		//get my projects
-		$projects = Auth::user()->ownedProjects()
-			->with(['category' => function ($query) {
-				$query->select('id', 'name', 'icon', 'color');
-			}, 'users' => function ($query) {
-				$query->select('users.id', 'users.name', 'users.profile_photo', 'users.email');
-			}])
-			->get();
-
 		//get all projects
-		$projects_all = Project::with(['category' => function ($query) {
+		$projects = Project::with(['category' => function ($query) {
 				$query->select('id', 'name', 'icon', 'color');
 			}, 'users' => function ($query) {
 				$query->select('users.id', 'users.name', 'users.profile_photo', 'users.email');
 			}])
 			->get();
 
-
-		//get all users except me to assign project
-		$users = User::where('id', '!=', Auth::id())
-             ->select('id', 'name')
-             ->get();
-		
-        return view('projects', compact('projects', 'projects_all', 'categories', 'users'));
+		return response()->json($projects);
     }
-
 
     public function store(Request $request)
     {
@@ -67,7 +42,7 @@ class ProjectController extends Controller
                 'category_id' => $validatedData['category_id'],
                 'start_date' => $validatedData['start_date'],
                 'end_date' => $validatedData['end_date'],
-                'owner_id' => Auth::id(),
+                'owner_id' => $validatedData['owner_id'],
             ]);
 			
 			$validatedData['users'][] = $project->owner_id;
@@ -89,52 +64,10 @@ class ProjectController extends Controller
         }
     }
 
-    public function show(Project $project)
-    {
-        // Authorize the user to view the project
-        $this->authorize('view', $project);
-
-        // Eager load the related category, users, and tasks
-        $project->load([
-            'category' => function ($query) {
-                $query->select('id', 'name', 'icon', 'color');
-            },
-            'users' => function ($query) {
-                $query->select('users.id', 'users.name', 'users.profile_photo', 'users.email');
-            },
-			'tasks' => function ($query) {
-				$query->select('*')
-					->with(['assignedUser' => function ($query) {
-						$query->select('id', 'name', 'profile_photo');
-					}]);
-			}
-        ]);
-		// Separate tasks by status
-		$tasks = [];
-		$tasks[0] = $project->tasks->where('status', 0);  	//new
-		$tasks[1] = $project->tasks->where('status', 1);	//inProgress
-		$tasks[2] = $project->tasks->where('status', 2);	//inReview
-		$tasks[3] = $project->tasks->where('status', 3);	//completed
-		
-		// Get users assigned to the current project
-		$users = User::join('project_user', 'users.id', '=', 'project_user.user_id')
-			->where('project_user.project_id', $project->id)
-			->select('users.id', 'users.name')
-			->get();
-
-        // Pass the project to the view
-        return view('tasks', compact('project', 'users', 'tasks'));
-    }
 
 	public function update(Request $request, Project $project)
     {
-        if (Auth::id() !== $project->owner_id) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized action.'
-            ], 403);
-        }
-
+ 
         $validatedData = $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable',
@@ -170,13 +103,6 @@ class ProjectController extends Controller
 	
     public function destroy(Project $project)
     {
-        if (Auth::id() !== $project->owner_id) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized action.'
-            ], 403);
-        }
-
         try {
             DB::beginTransaction();
 

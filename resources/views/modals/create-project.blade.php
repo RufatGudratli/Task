@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="createProject-cancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary">Create</button>
             </div>
         </form>
@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('createProjectForm');
     form.addEventListener('submit', function(e) {
         e.preventDefault();
+		
+		//close modal
+		$('#createProject-cancel').click();
         
         // Validate dates
         const startDate = new Date(document.getElementById('createProject-start').value);

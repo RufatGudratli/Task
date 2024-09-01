@@ -9,8 +9,25 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'owner_id'];
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+		'name', 
+		'description', 
+		'owner_id', 
+		'category_id', 
+		'start_date', 
+		'end_date'
+	];
+	
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
+	
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
@@ -18,7 +35,7 @@ class Project extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'project_user');
     }
 
     public function tasks()

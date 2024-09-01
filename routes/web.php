@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 
 
 //Authentication routes
@@ -19,9 +20,13 @@ Route::middleware('auth')->prefix('auth')->group(function () {
 });
 
 //Landing page
-Route::get('/', [LandingController::class, 'index'])->name('landing');
+
 
 //Projects
 Route::middleware('auth')->group(function () {
+	Route::get('/', [ProjectController::class, 'index'])->name('projects');
     Route::resource('projects', ProjectController::class);
+    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::post('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
+    Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.delete');
 });
