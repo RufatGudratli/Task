@@ -45,6 +45,7 @@ For Linux or maOS : ```    cp .env.example .env    ```
 Generate the application key for your Laravel application:
 ```	php artisan key:generate    ```
 
+Connect Laravel to DB
 
 Migrate the Database and Seed Data
 ```	php artisan migrate --seed    ```
